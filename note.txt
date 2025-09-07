@@ -1,0 +1,225 @@
+sys.argv 기본 규칙: 명령줄 인자(Command Line Arguments)
+
+sys.argv는 파이썬 실행 시 전달된 모든 인자들을 리스트로 담음
+
+항상 맨 앞(sys.argv[0])에는 실행된 스크립트의 파일 이름이 자동으로 들어가요.
+
+python crawl.py 자동차 보험
+
+["crawl.py", "자동차", "보험"]
+
+sys.argv[0] → "crawl.py" (실행한 파일 이름)
+
+sys.argv[1] → "자동차" (첫 번째 사용자 입력)
+
+sys.argv[2] → "보험" (두 번째 사용자 입력)
+
+
+
+---------------------------------------------------------------------
+
+sys.argv == ["crawl.py"]
+len(sys.argv) == 1
+
+if len(sys.argv) < 2:
+    print(json.dumps({"error": "Usage: python crawl.py <keyword>"}))
+
+
+sys.argv == ["crawl.py" , "자동차"]
+
+len(sys.argv) == 2
+
+  else:
+        keyword = sys.argv[1]
+        result = crawl_related_keywords(keyword)
+        # ✅ 여기서 JSON으로 출력
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+
+
+---------------------------------------------------------------
+
+
+base_dir = os.path.dirname(os.path.abspath(__file__))
+json_path = os.path.join(base_dir, "related_keywords.json")
+
+
+__file__ → 현재 실행 중인 파이썬 파일 경로 (crawl\api\crawl.py)
+
+abspath(__file__) → 그걸 절대 경로로 변환 (D:\project\crawl\api\crawl.py)
+
+dirname(...) → 파일 이름을 떼고 폴더만 가져옴 (D:\project\crawl\api)
+
+os.path.join(..., "related_keywords.json") 
+→ 그 폴더 아래에 "related_keywords.json" 경로 생성 (D:\project\crawl\api\related_keywords.json)
+
+
+------------------------------------------------------------------
+
+ "type": "module"
+ 모듈 시스템이 ESM(ECMAScript Module) 으로 바뀝니다
+ .js 확장자 파일도 import / export 문법을 바로 쓸 수 있어요.
+
+import cron from "node-cron";
+import { exec } from "child_process";
+import path from "path";
+
+이렇게 사용가능 
+
+아니면 CommonJS 방식
+const cron = require("node-cron");
+const { exec } = require("child_process");
+const path = require("path");
+
+
+이렇게 해야 함.
+
+
+-----------------------------------------------------------
+
+[item.text.strip() for item in items if item.text.strip()]
+
+1. for item in items 반복 시작
+2. if item.text.strip() 조건 검사 : .strip() 텍스트를 공백 제거한 결과가 빈 문자열이 아닐 때만 true
+3. item.text.strip(): 최종적으로리스트에 넣을값  값 리스트에 추가됨
+
+if "":              # False
+    print("실행X")
+
+if "   ".strip():   # "   " → "" → False
+    print("실행X")
+
+related_keywords = []
+for item in items:                      # 1. items에서 요소 하나씩 꺼냄
+    text = item.text.strip()            # 2. 텍스트 가져와 공백 제거
+    if text:                            # 3. 빈 문자열이 아니면
+        related_keywords.append(text)   # 4. 리스트에 추가
+
+
+-----------------------------------------------------------------------
+
+* * * * * *
+┬ ┬ ┬ ┬ ┬ ┬
+│ │ │ │ │ └─ 초(Seconds) [선택적, node-cron에서는 지원]
+│ │ │ │ └─── 요일 (0 - 7) (0 = 일요일, 7 = 일요일)
+│ │ │ └───── 월 (1 - 12)
+│ │ └─────── 일 (1 - 31)
+│ └───────── 시 (0 - 23)
+└─────────── 분 (0 - 59)
+
+
+-----------------------------------------------------------------------
+
+1. Python (crawl.py)
+
+네이버에서 관련 검색어 크롤링 → 'list[str]' 반환
+
+stdout 출력
+
+{ keyword, related } '객체' 형태로 변환해 터미널로 전달
+
+2. Next.js API (route.ts)
+
+related_keywords.json 파일 읽기 (배열 구조)
+
+배열에서 .find()로 keyword에 맞는 객체 하나 추출
+
+API 응답
+
+NextResponse.json(found) → 항상 객체 응답
+
+3. 프론트 (page.tsx)
+
+const data = await res.json(); → 객체 수신
+
+setResults(data.related) → 배열 렌더링
+
+-----------------------------------------------------------------
+
+npx prisma generate
+schema.prisma를 읽어서 Prisma Client를 다시 생성
+
+npx prisma migrate dev --name init
+prisma/migrations 폴더에 SQL 마이그레이션 파일 생성
+
+
+npx prisma migrate reset --schema
+데이터 초기화
+
+
+---------------------------------------------------------------------
+
+1. puppeteer full 패키지의 특징
+
+설치할 때 자동으로 Chromium을 다운로드해요.
+
+그래서 실행 경로(executablePath)를 따로 지정할 필요가 없어요.
+
+로컬 Windows / macOS / Linux 환경에서 바로 실행 가능합니다.
+
+즉, 로컬에서 puppeteer.launch()만 해주면 바로 브라우저가 뜹니다.
+
+2. 서버 환경(Render, Vercel, AWS 등)에서는?
+
+용량 문제 때문에 puppeteer full 패키지는 배포 시 비효율적일 수 있어요.
+
+서버리스 환경에서는 puppeteer-core + @sparticuz/chromium 조합이 보통 권장됩니다.
+
+왜냐하면 puppeteer full 패키지는 Chromium을 포함하고 있어서 100MB~150MB 정도 빌드 크기가 커지거든요.
+
+
+
+----------------------------------------------------------------------
+전부 초기화
+npx prisma migrate reset
+
+npx prisma generate
+
+
+마이스 레이션 생성
+npx prisma migrate dev --name init
+
+
+Prisma로 validate 유효성 확인
+npx prisma validate    ->The schema at prisma\schema.prisma is valid
+
+다시 열면 데이터 들어감
+npx prisma studio
+
+
+실행 중인 컨테이너 목록 확인
+docker ps
+
+
+컨테이너 상세 정보 확인
+docker inspect mydb
+
+
+-----------------------------------------------------------------------
+
+// 페이지 안의 모든 <p> 태그를 찾음
+// eval : evaluate 
+const texts = await page.$$eval("p", (elements) => {
+  return elements.map(el => el.textContent);
+});
+
+$$eval = querySelectorAll($$) + evaluate(eval)
+
+
+filter(Boolean)은 배열 안에서 자바스크립트에서 “falsy”로 평가되는 값들을 제거해 줍니다.
+자바스크립트에서 falsy인 값은 아래처럼 여섯 가지예요:
+
+"" (빈 문자열)
+
+0
+
+null
+
+undefined
+
+false
+
+NaN
+
+["", 0, "포도", false, NaN, "사과"].filter(Boolean);
+// 결과: ["포도", "사과"]
+
