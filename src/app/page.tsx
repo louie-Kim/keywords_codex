@@ -50,7 +50,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col items-center justify-start p-8 bg-gray-100">
       <h1 className="text-2xl font-bold mb-4">네이버 연관검색어</h1>
 
-      {/* 테마 토글 버튼 */}
+      {/* 테마 토글 버튼 자리 이동하기 */}
        <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon">
