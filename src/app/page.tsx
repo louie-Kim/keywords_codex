@@ -27,7 +27,7 @@ export default function Home() {
       const res = await fetch(`/api?keyword=${encodeURIComponent(keyword)}`);
       const data = await res.json();
 
-      // 응답 데이터 확인용
+      // 응답 데이터 확인
       alert(`프론트에서 데이터 확인: ${JSON.stringify(data)}`);
 
       if (data.error) {
