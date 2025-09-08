@@ -59,34 +59,12 @@ const Navbar = () => {
 
   return (
     <nav className="min-h-screen flex flex-col bg-gray-100">
-      <div className="p-4 flex items-center justify-between sticky top-0 bg-background z-10 shadow-sm">
-        <div className="flex flex-col items-center justify-start p-8">
+      <div className="p-2 flex items-center justify-end sticky top-0 bg-background z-10 shadow-sm">
+        <div className="flex flex-col items-start justify-between p-0">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-4">
-              <h1 className="text-2xl font-bold">네이버 연관검색어</h1>
-
-              <Link href="/">Dashboard</Link>
+              {/* <Link href="/">Dashboard</Link> */}
               {/* THEME MENU */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="icon">
-                    <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                    <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                    <span className="sr-only">Toggle theme</span>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem onClick={() => setTheme("light")}>
-                    Light
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTheme("dark")}>
-                    Dark
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => setTheme("system")}>
-                    System
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
             </div>
 
             {/* USER MENU */}
@@ -116,15 +94,35 @@ const Navbar = () => {
           </DropdownMenu> */}
           </div>
 
-          <div className="flex gap-10 mt-4">
+          <div className="flex gap-4 mt-2">
             <Input
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
-              placeholder="검색어 입력"
+              placeholder="네이버 연관검색어 입력하세요"
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               className="w-64"
             />
             <Button onClick={handleSearch}>검색</Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="icon">
+                  <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                  <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                  <span className="sr-only">Toggle theme</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={() => setTheme("light")}>
+                  Light
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTheme("dark")}>
+                  Dark
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setTheme("system")}>
+                  System
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
 
           {loading && <Skeleton className="w-96 h-10 mb-4" />}
@@ -134,20 +132,22 @@ const Navbar = () => {
             </Alert>
           )}
 
-          <Card className="w-90 mt-6">
-            <CardHeader>검색 결과</CardHeader>
-            <CardContent>
-              <ScrollArea className="h-64">
-                <ul className="space-y-2">
-                  {results.map((r, i) => (
-                    <li key={i} className="border-b py-2 last:border-none">
-                      {r}
-                    </li>
-                  ))}
-                </ul>
-              </ScrollArea>
-            </CardContent>
-          </Card>
+          {!loading && results.length > 0 && (
+            <Card className="w-90 mt-6">
+              <CardHeader>검색 결과</CardHeader>
+              <CardContent>
+                <ScrollArea className="h-64">
+                  <ul className="space-y-2">
+                    {results.map((r, i) => (
+                      <li key={i} className="border-b py-2 last:border-none">
+                        {r}
+                      </li>
+                    ))}
+                  </ul>
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
     </nav>
